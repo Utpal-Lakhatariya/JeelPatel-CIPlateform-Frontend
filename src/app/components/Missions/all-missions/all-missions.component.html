@@ -1,0 +1,228 @@
+<app-header-mission
+ (dataEmitter)="recieveData($event)"
+  (filterEmitter)="recieveFilterTagData($event)" 
+  (filteredCountry)="recieveSelectedCountry($event)"
+  (filteredCity)="recieveSelectedCity($event)"
+  (filteredTheme)="recieveSelectedTheme($event)"
+  (filteredSkill)="recieveSelectedSkill($event)"
+></app-header-mission>
+
+@if(filterTagList['country'].length>0)
+{
+    @for( country of filterTagList['country']; track country)
+    {
+        <span class="mx-1">{{country}} <button type="button" (click)="removeFilter('country', country)">x</button></span>
+    }
+}
+@if(filterTagList['city'].length>0)
+{
+    @for( city of filterTagList['city']; track city)
+    {
+        <span class="mx-1">{{city}} <button type="button" (click)="removeFilter('city', city)">x</button></span>
+    }
+}
+@if(filterTagList['missionTheme'].length>0)
+{
+    @for( theme of filterTagList['missionTheme']; track theme)
+    {
+        <span class="mx-1">{{theme}} <button type="button" (click)="removeFilter('missionTheme', theme)">x</button></span>
+    }
+}
+@if(filterTagList['missionSkills'].length>0)
+{
+    @for( skill of filterTagList['missionSkills']; track skill)
+    {
+        <span class="mx-1">{{skill}} <button type="button" (click)="removeFilter('missionSkills', skill)">x</button></span>
+    }
+}
+
+
+<div class="row d-flex justify-content-center">
+    @if(missionList.length >0)
+    {
+
+    <div class="col-12 col-md-9">
+        <div class="col-12 d-flex justify-content-between my-3">
+            <div class="ps-2">
+                <h1 class="">Explore {{ missionList.length }} Missions</h1>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div>
+                    <form [formGroup]="formGroupFilter">
+                        <p-dropdown (onChange)="sortingMission()" formControlName="selectedSorting" [options]="sortings"
+                            optionLabel="name" optionValue="value" placeholder="Sort by" />
+                    </form>
+                </div>
+                <div class="view-buttons">
+                    <p-button icon="pi pi-th-large" [class.active]="activeView === 'grid'" (click)="setView('grid')"
+                        [styleClass]="'p-1'" />
+                    <p-button icon="pi pi-bars" [class.active]="activeView === 'list'" (click)="setView('list')"
+                        [styleClass]="'p-1'" />
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+    @else {
+        <div class="gap-3 text-center">
+    <h2 class="text-center"> No Mission Found</h2>
+    <p-button [type]="'submit'" label="Submit New Mission" [outlined]="true" severity="warning"
+                [styleClass]="'rounded-5 border-2 fw-medium fs-6 apply-button py-1 align-items-center'"  />
+            </div>
+            }
+    <div class="col-12 col-md-9">
+        <div class="row">
+            @for(mission of missionList ; track mission) {
+            <div class="col-lg-4 col-md-6  mt-4">
+                <p-card header="{{ mission.missionTitle }}">
+                    <ng-template pTemplate="header">
+                        <img alt="Card" src="data:image/png;base64,{{ mission.image }}" />
+                        <div class="position-absolute theme-name">{{mission.missionTheme}}</div>
+                        <div
+                            class="position-absolute image-buttons d-flex flex-column align-items-end justify-content-between">
+                            <div><p-button label="{{mission.city}}" icon="pi pi-map-marker"
+                                    [styleClass]="'py-0 my-2'" /></div>
+                            <div class="d-flex flex-column align-items-end">
+                                <p-button icon="pi pi-heart" [styleClass]="'py-1'" />
+                                <p-button icon="pi pi-user-plus" [styleClass]="'py-1'" />
+                            </div>
+                        </div>
+                    </ng-template>
+                    <!-- <p>{{ mission.missionShortDescription }}</p> -->
+                    <p class="short-description fw-light mb-2 px-3">
+                        {{mission.missionDescription}}
+                    </p>
+                    <div class="mb-1 d-flex justify-content-between px-3">
+                        <span class="fs-6 fw-medium">{{
+                            mission.missionOrganisationName
+                            }}</span>
+                        <p-rating [(ngModel)]="value" [cancel]="false" stars="5">
+                            <ng-template pTemplate="onicon">
+                                <i class="pi pi-star-fill" style="color: rgb(238, 217, 29)"></i>
+                            </ng-template>
+                            <ng-template pTemplate="officon">
+                                <i class="pi pi-star-fill" style="color: rgb(219, 218, 217)"></i>
+                            </ng-template>
+                        </p-rating>
+                    </div>
+                    <div
+                        class="col-12 mt-4 d-flex mt-3 border border-1 border-secondary-subtle border-start-0 border-end-0 px-3 py-2 pt-3 position-relative">
+                        <!-- <div class="col-6 d-flex">
+                  <div class="d-flex justify-content-center align-items-center px-2"><i class="pi pi-user" style="font-size: 1.3rem"></i></div>
+                <div class="d-flex flex-column">
+                  <div class="fs-6 fw-medium">{{ mission.totalSeats }}</div>
+                  <div class="fs-6 fw-light">seats left</div>
+                </div>
+              </div>
+              <div class="col-6 d-flex">
+                <div class="d-flex justify-content-center align-items-center px-2"><i class="pi pi-bullseye" style="font-size: 1.3rem"></i></div>
+                <div class="d-flex flex-column">
+                  <p-progressBar [value]="50" />
+                  <div class="fs-6 fw-light">50 achieved</div>
+                </div>
+              </div> -->
+                        <div class="col-5 col-lg-4  d-flex">
+                            <div class="d-flex justify-content-center mt-1 px-1">
+                                <i class="pi pi-user" style="font-size: 1.2rem"></i>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <div class="fs-6 fw-medium flex-grow-1">{{ mission.totalSeats }}</div>
+                                <div class="fs-6 fw-light seats-left">seats left</div>
+                            </div>
+                        </div>
+                        <div class="col-7 col-lg-8 d-flex">
+                            <div class="d-flex  justify-content-center mt-1 px-2">
+                                <i class="pi pi-bullseye" style="font-size: 1.3rem"></i>
+                            </div>
+                            <div class="d-flex flex-column flex-grow-1 justify-content-evenly">
+                                <div class="flex-grow-1 pt-2">
+                                    <p-progressBar [value]="50" [showValue]="false" [style]="{ height: '6px' }" />
+                                </div>
+                                <div class="fs-6 fw-light seats-left">50 achieved</div>
+                            </div>
+                        </div>
+
+                        <div class="position-absolute goal-object">Ongoing Opportunity</div>
+                    </div>
+                    <ng-template pTemplate="footer">
+                        <div class="d-flex justify-content-center">
+                            <p-button [type]="'submit'" label="Apply" [outlined]="true" severity="warning"
+                                [styleClass]="'rounded-5 border-2 fw-medium fs-6 apply-button py-1'"
+                                icon="pi pi-arrow-right" iconPos="right" />
+                        </div>
+                    </ng-template>
+                </p-card>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- <app-header-mission></app-header-mission>
+
+
+<div class="container mt-4">
+    <div class="row">
+        
+
+            <div class="container mt-4">
+                <h1 class="fw-bold">Explore {{missionList.length}} Missions</h1>
+
+                <div class="row">
+                    @for(mission of missionList ; track mission)
+                    {
+                    <div class="col-lg-4 col-md-6  mb-3">
+                        <p-card  header="{{mission.missionTitle}}" subheader="{{mission.misionShortDescription}}">
+                            <ng-template  pTemplate="header">
+                                <div class="position-relative d-inline-block w-100">
+                                    <img alt="Card" src='data:image/png;base64,{{mission.image}}' />
+                                    <p class="position-absolute theme-position pt-2 px-3 ">{{mission.missionTheme}}</p>
+                                </div>
+                                
+                            </ng-template>
+                            <div class="">
+                               
+                            </div>
+                            <div>
+                                <h3>{{mission.missionOrganisationName}}</h3>
+                                <p-rating [(ngModel)]="value" [cancel]="false" />
+                            </div>
+                            <p-divider />
+                            <p class="mission-goal mb-0">
+                                <small>
+                                    Feed and cooke for atleast 10000 children
+                                </small>
+                            </p>
+                            <div class=" row d-flex justify-content-between">
+                                <div class="col-4 mt-3 px-2 d-flex gap-3">
+                                    <i class="pi pi-user"></i>
+
+                                    <div>
+                                        <p class="mb-0">{{mission.totalSeats}}</p>
+                                        <p class="mb-0">seats left</p>
+                                    </div>
+                                </div>
+                                <div class="col-8 mt-3 d-flex p-0 gap-3">
+                                    <i class="pi pi-bullseye"></i>
+                                    <div class="w-75">
+                                        <p-progressBar [value]="50" />
+                                        <p class="mb-0">achieved</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <ng-template pTemplate="footer">
+                                <div class=" text-center flex gap-lg-2 mt-1">
+                                    <button pButton class="rounded-5 " style="width: 60%; " label="View Details ->"
+                                        [outlined]="true" severity="warning"></button>
+                                </div>
+                            </ng-template>
+                        </p-card>
+                    </div>
+
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div> -->

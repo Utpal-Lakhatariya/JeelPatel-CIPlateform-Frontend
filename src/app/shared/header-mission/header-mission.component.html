@@ -1,0 +1,166 @@
+<div class="row d-flex justify-content-center border-bottom border-1 border-light-subtle">
+    <div class="col-12 col-md-9 d-flex justify-content-between py-1">
+        <div class="d-flex">
+            <div class=""></div>
+            <p-menubar [model]="items" [styleClass]="'border-0 bg-transparent p-0 menubar'" />
+        </div>
+        <div class="d-flex align-items-center gap-1">
+            <p-button [type]="'submit'" label="Submit New Mission" [outlined]="true" severity="warning"
+                [styleClass]="'rounded-5 border-2 fw-medium fs-6 apply-button py-1'" (click)="showDialog()" />
+            <i class="pi pi-bell text-3xl mx-2" style="font-size: 1.3rem" pBadge value="2"></i>
+            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+                [styleClass]="'mt-1 mx-1'" size="xlarge" shape="circle" />
+            <p-menubar [model]="profileItems" [styleClass]="'border-0 bg-transparent p-0 profileItems menubar'" />
+        </div>
+    </div>
+</div>
+
+<div class="row d-flex justify-content-center border-bottom border-1 border-light-subtle">
+    <div class="col-12 col-md-9 d-flex justify-content-between">
+        <div class="ps-1 d-flex flex-grow-1">
+            <form [formGroup]="formGroupSearch" class="w-100">
+                <p-inputGroup [styleClass]="'w-100'">
+                    <p-inputGroupAddon>
+                        <i class="pi pi-search"></i>
+                    </p-inputGroupAddon>
+                    <input type="text" pInputText formControlName="search" class="border-0 w-100 h-100"
+                        style="outline: none" placeholder="Search mission..." />
+                </p-inputGroup>
+            </form>
+        </div>
+        <form [formGroup]="createMissionForm">
+            <div class="d-flex">
+                <p-dropdown (onChange)="OnCountryChange(); addFilter('country') " [options]="countryList" optionLabel="name"
+                    optionValue="value" placeholder="Country" formControlName="country" />
+                <p-dropdown (onChange)="OnFilterChange(); addFilter('city') " [options]="cityList" optionLabel="name" optionValue="value"
+                    placeholder="City" formControlName="city" />
+
+                <p-dropdown (onChange)="OnFilterChange(); addFilter('missionTheme') " [options]="themeList" formControlName="missionTheme" optionLabel="name" optionValue="name"
+                    placeholder="Theme" />
+                <p-dropdown   (onChange)="OnFilterChange(); addFilter('missionSkills') "   [options]="skillsList" formControlName="missionSkills" optionLabel="name" optionValue="name"
+                    placeholder="Skill" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- <div>
+    <div class="card">
+        <p-menubar [model]="items">
+
+            <div class="d-flex gap-5">
+                <button pButton class=" w-100 rounded-5" label="Submit New Mission" (click)="showDialog()"
+                    [outlined]="true" severity="warning"></button>
+                <div class="d-flex align-items-center gap-2 justify-content-start">
+                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+                        styleClass="mr-2" size="large" shape="circle" />
+                    <p-dropdown [options]="missions" [checkmark]="true" optionLabel="name" [showClear]="true"
+                        placeholder="Jeel Patel" />
+                </div>
+            </div>
+        </p-menubar>
+
+    </div>
+
+
+    <div class="menu-bar row mt-3">
+
+        <div class="col-4">
+            <input type="text" class="w-100 h-75 pi pi-search" placeholder="Search Mission" />
+        </div>
+
+        <div class=" col-8 d-flex justify-content-between">
+            <div class="p-col">
+                <p-dropdown [options]="countryList" optionLabel="name" placeholder=" Country"  >
+                </p-dropdown>
+            </div>
+            <div class="p-col">
+                <p-dropdown [options]="cityList" optionLabel="name" placeholder=" City">
+                </p-dropdown>
+            </div>
+            <div class="p-col">
+                <p-dropdown [options]="themeList" optionLabel="name" placeholder=" Theme">
+                </p-dropdown>
+            </div>
+            <div class="p-col">
+                <p-dropdown [options]="skillsList" optionLabel="name" placeholder=" Skill">
+                </p-dropdown>
+            </div>
+        </div>
+    </div> -->
+
+
+
+<!-- Model -->
+
+<p-dialog header=" Add New Mission" [modal]="true" [(visible)]="visible" [position]="'top'" [style]="{ width: '30%' }">
+
+
+    <form [formGroup]="createMissionForm" (ngSubmit)="createMission">
+        <div class="row">
+            <div class=" mb-4   col-lg-6 col-sm-12">
+                <p> Country</p>
+                <p-dropdown [options]="countryList" [style]="{'width':'100%'}" optionLabel="name" optionValue="value"
+                    placeholder="Select a Country" formControlName="country" (onChange)="OnCountryChange()" />
+            </div>
+            <div class="mb-4  col-lg-6 col-sm-12 ">
+                <p> City </p>
+                <p-dropdown [options]="cityList" optionLabel="name" [style]="{'width':'100%'}" optionValue="value"
+                    formControlName="city" placeholder="Select a City" />
+            </div>
+        </div>
+        <div class="mb-4">
+            <p>Mission Tittle</p>
+            <input type="text" placeholder="Enter Mission Tittle" pInputText formControlName="missionTitle"
+                class="w-100 " />
+        </div>
+        <div class="mb-4">
+            <p>Mission Description</p>
+            <textarea rows="5" placeholder="Enter your message" cols="30" pInputTextarea
+                formControlName="missionDescription" class="w-100"></textarea>
+        </div>
+        <div class="mb-4">
+            <p>Mission Organisation Name</p>
+            <input type="text" placeholder="Enter mission organisation name" pInputText
+                formControlName="missionOrganisationName" class="h-20 w-100" />
+        </div>
+        <div class="mb-4">
+            <p>Mission Organisation Detail</p>
+            <textarea placeholder="Enter your message" rows="5" cols="30" pInputTextarea
+                formControlName="missionOrganisationDetail" class="w-100"></textarea>
+        </div>
+        <div class="mb-4">
+            <p for="icondisplay" class="font-bold block mb-2"> Start Date </p>
+            <p-calendar [iconDisplay]="'input'" formControlName="missionStartDate" placeholder="Select Start date"
+                [showIcon]="true" inputId="icondisplay" [style]="{'width':'100%'}" />
+        </div>
+        <div class="mb-4">
+            <p for="icondisplay" class="font-bold block mb-2"> End Date </p>
+            <p-calendar [iconDisplay]="'input'" formControlName="missionEndDate" placeholder="Select end date"
+                [showIcon]="true" inputId="icondisplay" [style]="{'width':'100%'}" />
+        </div>
+
+        <div class="mb-4">
+            <p>Total Seats</p>
+            <p-inputNumber placeholder="Enter total seats" formControlName="totalSeats" inputId="integeronly"
+                styleClass="w-100" />
+        </div>
+        <div class="mb-4">
+            <p>Mission Registration Deadline</p>
+            <input type="text" placeholder="Enter mission Registration Deadline"
+                formControlName="missionRegistrationDeadline" pInputText class="w-100 " />
+        </div>
+        <div class="mb-4">
+            <p> Theme</p>
+            <p-dropdown [options]="themeList" formControlName="missionTheme" [style]="{'width':'100%'}"
+                optionLabel="name" optionValue="value" placeholder="Select mission theme" />
+        </div>
+        <div class="mb-4">
+            <p> Skills</p>
+            <p-dropdown [options]="skillsList" formControlName="missionSkills" [style]="{'width':'100%'}"
+                optionLabel="name" optionValue="value" placeholder="Select mission skills" />
+        </div>
+        <button pButton class=" w-100 rounded-5" label="Submit" [outlined]="true" severity="warning"></button>
+    </form>
+</p-dialog>

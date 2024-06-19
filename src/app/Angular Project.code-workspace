@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../Angular/firstAngularApp"
+		},
+		{
+			"path": "../../../../Angular/demo-project"
+		}
+	],
+	"settings": {}
+}
