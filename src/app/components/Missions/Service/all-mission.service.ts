@@ -15,7 +15,7 @@ export class AllMissionService {
   http=inject(HttpClient)
   constructor() { }
 
-  getMission(country:number, city:number, theme:string, skill:string, sortingOption:number ):Observable<AuthResponse<IMission[]>>
+  getMission(country:number, city:number, theme:string, skill:string, sortingOption:number, searchTerm: string ):Observable<AuthResponse<IMission[]>>
   {
     console.log("In Mission Service")
     let params = new HttpParams()
@@ -23,11 +23,11 @@ export class AllMissionService {
     .set('city', city)
     .set('theme', theme)
     .set('skill', skill)
-    .set('sortingOption', sortingOption.toString());
-    
+    .set('sortingOption', sortingOption.toString())
+    .set('searchTerm', searchTerm);
     console.log("Set mission param value");
     // return this.http.get<IMission[]>(this.apiUrl+"api/Mission?country="+country+"&city="+city+ "&theme="+theme+"&skill="+ skill+"&sortingOption="+sortingOption)
-    return this.http.get<AuthResponse<IMission[]>>(this.apiUrl+"api/Mission?country="+country+"&city="+city+"&theme="+theme+"&skill="+skill+"&sortingOption="+sortingOption)
+    return this.http.get<AuthResponse<IMission[]>>(this.apiUrl+"api/Mission?country="+country+"&city="+city+"&theme="+theme+"&skill="+skill+"&sortingOption="+sortingOption+"&searchTerm="+searchTerm)
     // return this.http.get<AuthResponse<IMission[]>>(this.apiUrl+"Mission",{params})
   }
 

@@ -69,7 +69,7 @@ export class AllMissionsComponent {
 
     this.selectedSortingOption = this.formGroupFilter.get('selectedSorting')?.value ?? 0;
     if (this.selectedSortingOption) {
-      this.missionService.getMission(this.country, this.city, "", "", this.selectedSortingOption).subscribe(
+      this.missionService.getMission(this.country, this.city, "", "", this.selectedSortingOption, "").subscribe(
         {
           next: (response) => {
             if (response.isSuccess) {
@@ -93,21 +93,21 @@ export class AllMissionsComponent {
     this.filterTagList = data;
   }
 
-  recieveSelectedCity(data: number) {
-    this.selectedCity = data;
+  recieveSelectedCity(data: ICity[]) {
+    this.cityList = data;
   }
   recieveSelectedCountry(data: ICountry[]) {
     this.countryList = data;
   }
-  recieveSelectedTheme(data: string) {
-    this.selectedTheme = data;
+  recieveSelectedTheme(data: ITheme[]) {
+    this.themeList = data;
   }
-  recieveSelectedSkill(data: string) {
-    this.selectedSkill = data;
+  recieveSelectedSkill(data: ISkill[]) {
+    this.skillsList = data;
   }
   removeFilter(filterType: string, filterValue: string): void {
 
-    debugger;
+     
     this.filterTagList[filterType] = this.filterTagList[filterType].filter(f => f !== filterValue);
     if (filterType == 'country') {
       this.missionList = this.missionList.filter(f => f.country != filterValue);
@@ -118,18 +118,41 @@ export class AllMissionsComponent {
     if (filterType == 'missionTheme') {
       this.missionList = this.missionList.filter(f => f.missionTheme != filterValue);
     }
-    if (filterType == 'missionTheme') {
+    if (filterType == 'missionSkills') {
       this.missionList = this.missionList.filter(f => f.missionSkills != filterValue);
     }
 
-    const tagCountry = this.filterTagList['country'][0]
+    let tagCountry = this.filterTagList['country'][0]?? ""
+    let tagCity=this.filterTagList['city'][0]?? ""
+    let tagSkill=this.filterTagList['missionSkills'][0]?? ""
+    let tagTheme=this.filterTagList['missionTheme'][0]?? ""
     console.log("000000")
     console.log(tagCountry)
     let currentCountry = this.countryList.filter(f => f.name == tagCountry)[0]['value'];
+    console.log(tagCity)
+    console.log(this.cityList)
+    let currentCity=0
+    let currentTheme=""
+    let currentSkill=""
+    if(tagCity!="")
+      {
+        currentCity = this.cityList.filter(f => f.name == tagCity)[0]['value'] ? this.cityList.filter(f => f.name == tagCity)[0]['value']: 0;
+      }
+      if(tagTheme!="")
+        {
+
+          currentTheme =this.themeList.filter(f => f.name == tagTheme)[0]['name'] ;
+        }
+        if(tagSkill!="")
+          {
+
+            currentSkill = this.skillsList.filter(f => f.name == tagSkill)[0]['name'] ;
+          }
     console.log(currentCountry)
     console.log(this.countryList)
-    if (this.filterTagList['country'].length == 1 && this.filterTagList['city'].length == 0 && this.filterTagList['missionTheme'].length == 0 && this.filterTagList['missionTheme'].length == 0) {
-      this.missionService.getMission(currentCountry, this.selectedCity, this.selectedTheme, this.selectedSkill, this.sortingOption).subscribe(
+   // if (this.filterTagList['country'].length == 1 && this.filterTagList['city'].length == 0 && this.filterTagList['missionTheme'].length == 0 && this.filterTagList['missionTheme'].length == 0) {
+       
+      this.missionService.getMission(currentCountry, currentCity , currentTheme, currentSkill, this.sortingOption, "").subscribe(
         {
           next: (response) => {
             if (response.isSuccess) {
@@ -141,10 +164,10 @@ export class AllMissionsComponent {
           }
         }
       );
-    }
+   // }
 
     if (this.filterTagList['country'].length == 0 && this.filterTagList['city'].length == 0 && this.filterTagList['missionTheme'].length == 0 && this.filterTagList['missionTheme'].length == 0) {
-      this.missionService.getMission(0, 0, "", "", 0).subscribe(
+      this.missionService.getMission(0, 0, "", "", 0, "").subscribe(
         {
           next: (response) => {
             if (response.isSuccess) {
@@ -188,7 +211,7 @@ export class AllMissionsComponent {
     this.sortingOption = parseInt(this.route.snapshot.queryParamMap.get('sortingOption') ?? '0', 10);
 
 
-    this.missionService.getMission(this.country, this.city, this.missionTheme, this.missionSkills, this.sortingOption).subscribe(
+    this.missionService.getMission(this.country, this.city, this.missionTheme, this.missionSkills, this.sortingOption, "").subscribe(
       {
         next: (response) => {
           if (response.isSuccess) {

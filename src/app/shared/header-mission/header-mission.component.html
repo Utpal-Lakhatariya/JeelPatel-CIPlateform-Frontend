@@ -18,27 +18,27 @@
 <div class="row d-flex justify-content-center border-bottom border-1 border-light-subtle">
     <div class="col-12 col-md-9 d-flex justify-content-between">
         <div class="ps-1 d-flex flex-grow-1">
-            <form [formGroup]="formGroupSearch" class="w-100">
+            <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="w-100">
                 <p-inputGroup [styleClass]="'w-100'">
                     <p-inputGroupAddon>
                         <i class="pi pi-search"></i>
                     </p-inputGroupAddon>
-                    <input type="text" pInputText formControlName="search" class="border-0 w-100 h-100"
-                        style="outline: none" placeholder="Search mission..." />
+                    <input type="text" pInputText (keydown.enter)="onSearch()" formControlName="searchValue"
+                        class="border-0 w-100 h-100" style="outline: none" placeholder="Search mission..." />
                 </p-inputGroup>
             </form>
         </div>
         <form [formGroup]="createMissionForm">
             <div class="d-flex">
-                <p-dropdown (onChange)="OnCountryChange(); addFilter('country') " [options]="countryList" optionLabel="name"
-                    optionValue="value" placeholder="Country" formControlName="country" />
-                <p-dropdown (onChange)="OnFilterChange(); addFilter('city') " [options]="cityList" optionLabel="name" optionValue="value"
-                    placeholder="City" formControlName="city" />
+                <p-dropdown (onChange)="OnCountryChange(); addFilter('country') " [options]="countryList"
+                    optionLabel="name" optionValue="value" placeholder="Country" formControlName="country" />
+                <p-dropdown (onChange)="OnFilterChange(); addFilter('city') " [options]="cityList" optionLabel="name"
+                    optionValue="value" placeholder="City" formControlName="city" />
 
-                <p-dropdown (onChange)="OnFilterChange(); addFilter('missionTheme') " [options]="themeList" formControlName="missionTheme" optionLabel="name" optionValue="name"
-                    placeholder="Theme" />
-                <p-dropdown   (onChange)="OnFilterChange(); addFilter('missionSkills') "   [options]="skillsList" formControlName="missionSkills" optionLabel="name" optionValue="name"
-                    placeholder="Skill" />
+                <p-dropdown (onChange)="OnFilterChange(); addFilter('missionTheme') " [options]="themeList"
+                    formControlName="missionTheme" optionLabel="name" optionValue="name" placeholder="Theme" />
+                <p-dropdown (onChange)="OnFilterChange(); addFilter('missionSkills') " [options]="skillsList"
+                    formControlName="missionSkills" optionLabel="name" optionValue="name" placeholder="Skill" />
             </div>
         </form>
     </div>
@@ -161,6 +161,57 @@
             <p-dropdown [options]="skillsList" formControlName="missionSkills" [style]="{'width':'100%'}"
                 optionLabel="name" optionValue="value" placeholder="Select mission skills" />
         </div>
+
+
+        <div class="form-group my-4">
+            <div class="mb-1 text-secondary">Mission Images</div>
+            <div class="card flex justify-content-center">
+                <p-fileUpload #imageUpload name="myfile[]" url="https://www.primefaces.org/cdn/api/upload.php"
+                    [multiple]="true" accept="image/*" maxFileSize="1048576" showUploadButton="false"
+                    [invalidFileSizeMessageSummary]="'Invalid file size'">
+
+                    <ng-template pTemplate="header" let-files let-chooseCallback="chooseCallback">
+                        <div class="d-flex justify-content-center flex-column align-items-center w-100 py-3"
+                            (click)="triggerImageUpload()">
+                            <div class="w-100 d-flex justify-content-center">
+                                <i class="pi pi-cloud-upload" style="font-size: 2rem"></i>
+                            </div>
+                            <div class="w-100 d-flex justify-content-center"><span>upload image here</span></div>
+                        </div>
+                    </ng-template>
+                </p-fileUpload>
+            </div>
+        </div>
+        <div class="form-group my-4">
+            <div class="mb-1 text-secondary">Mission Images</div>
+            <div class="card flex justify-content-center">
+                <p-fileUpload #fileUpload name="myfile[]" url="https://www.primefaces.org/cdn/api/upload.php"
+                    [multiple]="true" accept="image/*" maxFileSize="1048576"
+                    [invalidFileSizeMessageSummary]="'Invalid file size'">
+                    <ng-template pTemplate="header" let-files let-chooseCallback="chooseCallback">
+                        <div class="d-flex justify-content-center flex-column align-items-center w-100 py-3"
+                            (click)="triggerImageUpload()">
+                            <div class="w-100 d-flex justify-content-center">
+                                <i class="pi pi-cloud-upload" style="font-size: 2rem"></i>
+                            </div>
+                            <div class="w-100 d-flex justify-content-center"><span>upload image here</span></div>
+                        </div>
+                    </ng-template>
+                </p-fileUpload>
+            </div>
+        </div>
+
+
+        <!-- <p-fileUpload name="myfile[]" url="https://www.primefaces.org/cdn/api/upload.php" [multiple]="true" accept="image/*" maxFileSize="1000000"  >
+    
+    
+    <ng-template pTemplate="empty">
+        <div class="flex align-items-center justify-content-center flex-column">
+            <i class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400"></i>
+            <p class="mt-4 mb-0">Drag and drop files to here to upload.</p>
+        </div>
+    </ng-template>
+</p-fileUpload> -->
         <button pButton class=" w-100 rounded-5" label="Submit" [outlined]="true" severity="warning"></button>
     </form>
 </p-dialog>
